@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/test")
 public class TestController {
 
-    @GetMapping("/hello")
+    @GetMapping("/helloworld")
     public String hello() {
         return "Hello, secured API is working!";
     }
