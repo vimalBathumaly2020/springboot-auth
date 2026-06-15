@@ -19,6 +19,9 @@ target/
 *.iml
 *.ipr
 .env
+.env.*
+.env.local
+.env.*.local
 application.properties
 
 ### NetBeans ###
