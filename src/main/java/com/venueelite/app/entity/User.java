@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.index.Indexed;
 
+import java.nio.file.FileStore;
 import java.time.LocalDateTime;
 
 
@@ -37,8 +38,6 @@ public class User {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
-
 
 
 }

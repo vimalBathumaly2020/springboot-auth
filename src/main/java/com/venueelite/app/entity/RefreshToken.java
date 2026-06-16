@@ -30,4 +30,8 @@ public class RefreshToken {
     private boolean revoked;
 
     private LocalDateTime createdAt;
+
+    public boolean isExpired() {
+        return LocalDateTime.now().isAfter(expiresAt);
+    }
 }

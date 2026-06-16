@@ -23,6 +23,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -45,9 +46,16 @@ public class AuthServiceImpl implements AuthService {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        userRepository.save(user);
+        userRepository.save(user);  // ← save first
 
-        return buildAuthResponse(user);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+        String accessToken = jwtService.generateToken(user);
+
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken.getToken())
+                .user(user)
+                .build();
     }
 
     // ================= LOGIN =================
@@ -64,39 +72,28 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return buildAuthResponse(user);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+        String accessToken = jwtService.generateToken(user);
+
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken.getToken())
+                .user(user)
+                .build();
     }
 
     // ================= REFRESH TOKEN =================
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest request) {
-
-        RefreshToken stored = refreshTokenRepository.findByToken(request.getRefreshToken())
-                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
-
-        if (stored.isRevoked() || stored.getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Refresh token expired");
-        }
-
-        User user = userRepository.findById(stored.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        stored.setRevoked(true);
-        refreshTokenRepository.save(stored);
-
-        return buildAuthResponse(user);
+        return refreshTokenService.rotateToken(request.getRefreshToken());
     }
 
     // ================= LOGOUT =================
     @Override
     public void logout(String refreshToken) {
-
-        RefreshToken token = refreshTokenRepository.findByToken(refreshToken)
-                .orElseThrow(() -> new RuntimeException("Token not found"));
-
-        token.setRevoked(true);
-        refreshTokenRepository.save(token);
+        refreshTokenService.revokeToken(refreshToken);
     }
+
 
     // ================= FORGOT PASSWORD =================
     @Override
