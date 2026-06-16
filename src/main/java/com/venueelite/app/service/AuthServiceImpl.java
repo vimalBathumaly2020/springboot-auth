@@ -27,6 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
     // ================= REGISTER =================
     @Override
@@ -104,7 +105,7 @@ public class AuthServiceImpl implements AuthService {
 
         String resetToken = UUID.randomUUID().toString();
 
-        System.out.println("RESET TOKEN: " + resetToken);
+        emailService.sendPasswordResetEmail(user.getEmail(), resetToken); // ← add this
     }
 
     // ================= RESET PASSWORD =================
