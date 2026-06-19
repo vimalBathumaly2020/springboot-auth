@@ -18,7 +18,7 @@ public class VenueSearchController {
     // GET /api/v1/venues/search?q=rooftop
     @GetMapping("/search")
     public ResponseEntity<Page<VenueListResponse>> search(
-            @RequestParam String q,
+            @RequestParam(name = "query", defaultValue = "") String q,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
