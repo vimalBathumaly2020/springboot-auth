@@ -51,12 +51,8 @@ public class GlobalExceptionHandler {
             RuntimeException ex,
             HttpServletRequest request
     ) {
-
-        return buildError(
-                ex.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                request.getRequestURI()
-        );
+        ex.printStackTrace(); // TEMPORARY — just to see what's happening
+        return buildError(ex.getMessage(), HttpStatus.BAD_REQUEST, request.getRequestURI());
     }
 
     // ================= GENERIC EXCEPTION =================

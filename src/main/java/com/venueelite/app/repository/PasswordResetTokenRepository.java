@@ -1,4 +1,11 @@
 package com.venueelite.app.repository;
 
-public class PasswordResetTokenRepository {
+import com.venueelite.app.entity.PasswordResetToken;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.Optional;
+
+public interface PasswordResetTokenRepository extends MongoRepository<PasswordResetToken, String> {
+    Optional<PasswordResetToken> findByToken(String token);
+    void deleteByEmail(String email);
 }

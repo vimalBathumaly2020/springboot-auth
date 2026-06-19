@@ -32,11 +32,14 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // ✅ PUBLIC APIs
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers(                                  // ← add this
+                        .requestMatchers(
                                 "/api/v1/venues/search",
                                 "/api/v1/venues/filter"
                         ).permitAll()
+
+                        // 🔒 EVERYTHING ELSE SECURED
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
