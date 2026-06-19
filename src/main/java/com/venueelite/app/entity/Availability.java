@@ -1,9 +1,10 @@
 package com.venueelite.app.entity;
 
-import com.venueelite.app.enums.VenueDay;
-
 import lombok.Data;
 import lombok.Builder;
+
+import com.venueelite.app.enums.VenueDay;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

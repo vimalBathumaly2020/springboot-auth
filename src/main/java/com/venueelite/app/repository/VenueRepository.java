@@ -2,6 +2,10 @@ package com.venueelite.app.repository;
 
 import org.springframework.stereotype.Repository;
 
+import com.venueelite.app.entity.Venue;
+import com.venueelite.app.enums.VenueStatus;
+import com.venueelite.app.enums.VenueType;
+
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;

@@ -1,8 +1,5 @@
 package com.venueelite.app.dto;
 
-import com.venueelite.app.entity.Address;
-import com.venueelite.app.entity.Availability;
-import com.venueelite.app.enums.VenueType;
 import lombok.Data;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -10,6 +7,10 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.venueelite.app.entity.Address;
+import com.venueelite.app.entity.Availability;
+import com.venueelite.app.enums.VenueType;
 
 @Data
 @Builder
