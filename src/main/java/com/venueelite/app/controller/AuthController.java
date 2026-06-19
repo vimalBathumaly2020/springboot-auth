@@ -5,6 +5,7 @@ import com.venueelite.app.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -53,9 +54,14 @@ public class AuthController {
 
     // ========================= FORGOT PASSWORD =========================
     @PostMapping("/forgot-password")
-    public ResponseEntity<MessageResponse> forgotPassword(@RequestBody ForgotPasswordRequest request) {
-        System.out.println(">>>> CONTROLLER HIT: " + request.getEmail());
-        authService.forgotPassword(request);
+    public ResponseEntity<MessageResponse> forgotPassword(
+            @RequestBody ForgotPasswordRequest request,
+            HttpServletRequest httpRequest) {
+
+        String ip = httpRequest.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isBlank()) ip = httpRequest.getRemoteAddr();
+
+        authService.forgotPassword(request, ip);
         return ResponseEntity.ok(
                 MessageResponse.builder()
                         .message("Reset link sent to email")
@@ -66,9 +72,14 @@ public class AuthController {
 
     // ========================= RESET PASSWORD =========================
     @PostMapping("/reset-password")
-    public ResponseEntity<MessageResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
-        System.out.println(">>>> RESET PASSWORD HIT: token=" + request.getToken());
-        authService.resetPassword(request);
+    public ResponseEntity<MessageResponse> resetPassword(
+            @RequestBody ResetPasswordRequest request,
+            HttpServletRequest httpRequest) {
+
+        String ip = httpRequest.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isBlank()) ip = httpRequest.getRemoteAddr();
+
+        authService.resetPassword(request, ip);
         return ResponseEntity.ok(
                 MessageResponse.builder()
                         .message("Password reset successful")
@@ -76,4 +87,5 @@ public class AuthController {
                         .build()
         );
     }
+
 }

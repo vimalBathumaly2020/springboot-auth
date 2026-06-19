@@ -24,4 +24,6 @@ public class PasswordResetToken {
     private String token;
 
     private LocalDateTime expiresAt;
+
+    private String ipAddress;
 }
