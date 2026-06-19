@@ -1,10 +1,12 @@
 package com.venueelite.app.service;
 
 import com.venueelite.app.dto.*;
+import com.venueelite.app.entity.PasswordResetToken;
 import com.venueelite.app.entity.RefreshToken;
 import com.venueelite.app.entity.User;
 import com.venueelite.app.enums.Role;
 import com.venueelite.app.enums.UserStatus;
+import com.venueelite.app.repository.PasswordResetTokenRepository;
 import com.venueelite.app.repository.RefreshTokenRepository;
 import com.venueelite.app.repository.UserRepository;
 import com.venueelite.app.security.JwtService;
@@ -28,6 +30,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     // ================= REGISTER =================
     @Override
@@ -103,22 +106,43 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        String resetToken = UUID.randomUUID().toString();
+        // generate token
+        String token = UUID.randomUUID().toString();
 
-        emailService.sendPasswordResetEmail(user.getEmail(), resetToken); // ← add this
+        // save token in DB
+        PasswordResetToken resetToken = PasswordResetToken.builder()
+                .email(user.getEmail())
+                .token(token)
+                .expiresAt(LocalDateTime.now().plusMinutes(30))
+                .build();
+
+        passwordResetTokenRepository.save(resetToken);
+
+        // send email
+        emailService.sendPasswordResetEmail(user.getEmail(), token);
     }
 
     // ================= RESET PASSWORD =================
     @Override
     public void resetPassword(ResetPasswordRequest request) {
 
-        User user = userRepository.findByEmail(request.getEmail())
+        PasswordResetToken resetToken = passwordResetTokenRepository
+                .findByToken(request.getToken())
+                .orElseThrow(() -> new RuntimeException("Invalid token"));
+
+        if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token expired");
+        }
+
+        User user = userRepository.findByEmail(resetToken.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         user.setUpdatedAt(LocalDateTime.now());
 
         userRepository.save(user);
+
+        passwordResetTokenRepository.delete(resetToken);
     }
 
     // ================= HELPER =================
