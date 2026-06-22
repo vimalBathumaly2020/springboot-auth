@@ -1,6 +1,7 @@
 package com.venueelite.app.dto;
 
 import com.venueelite.app.entity.User;
+
 import lombok.Builder;
 import lombok.Data;
 
