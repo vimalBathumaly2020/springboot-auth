@@ -14,10 +14,15 @@ import com.venueelite.app.service.VenueService;
 import com.venueelite.app.entity.Favorite;
 import com.venueelite.app.service.FavoriteService;
 
+import com.venueelite.app.entity.Address;
+
 
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -36,6 +41,14 @@ public class VenueController {
     public ResponseEntity<List<Venue>> getVenueByHostId(@PathVariable String hostId){
         return ResponseEntity.ok(venueService.getVenuesByHostId(hostId));
     }
+    @GetMapping("/{venueId}/address")
+    public ResponseEntity<Address> getVenueAddress(@PathVariable String venueId) {
+        Optional<Venue> getVenue = venueService.getVenuesById(venueId);
+        if(!getVenue.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(getVenue.get().getAddress());
+    }    
     @GetMapping("/city/{city}")
     public ResponseEntity<List<Venue>> getVenuesByAddressCity(@PathVariable String city) {
         return ResponseEntity.ok(venueService.getVenuesByAddressCity(city));
