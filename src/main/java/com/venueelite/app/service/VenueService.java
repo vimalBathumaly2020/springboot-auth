@@ -44,7 +44,7 @@ public class VenueService{
         return venueRepository.findByAddressCity(addressCity);
     }
 
-    public Venue createVenue(VenueDto dto){
+    public Venue createVenue(VenueDto dto,String userId){
         Venue venue = Venue.builder()
                       .hostId(dto.getHostId())
                       .title(dto.getTitle())
@@ -64,10 +64,12 @@ public class VenueService{
                       .rejectReason(null)
                       .createAt(LocalDateTime.now())
                       .updateAt(LocalDateTime.now())
+                      .createdBy(userId)
+                      .updatedBy(userId)
                       .build();
         return venueRepository.save(venue);
     }
-    public Venue updateVenue(String id, VenueDto dto){
+    public Venue updateVenue(String id, VenueDto dto,String userId){
         Optional<Venue> existing = venueRepository.findById(id);
         if(existing.isPresent()){
             Venue venue = existing.get();
@@ -83,6 +85,7 @@ public class VenueService{
             venue.setImages(dto.getImages());
             venue.setIsAvailable(dto.getIsAvailable());
             venue.setUpdateAt(LocalDateTime.now());
+            venue.setUpdatedBy(userId);
             return venueRepository.save(venue);
         }
         return null;

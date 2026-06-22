@@ -16,5 +16,5 @@ public class Availability {
     private VenueDay day; // enum VenueDay
     private String openTime;
     private String closeTime;
-    private boolean isAvailable;
+    private Boolean isAvailable;
 }
