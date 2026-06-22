@@ -38,6 +38,9 @@ public class SecurityConfig {
                                 "/api/v1/venues/search",
                                 "/api/v1/venues/filter"
                         ).permitAll()
+                        .requestMatchers(
+                            "/api/v1/booking/availability"
+                        ).permitAll()
 
                         // 🔒 EVERYTHING ELSE SECURED
                         .anyRequest().authenticated()
