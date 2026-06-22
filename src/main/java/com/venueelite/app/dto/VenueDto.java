@@ -29,6 +29,8 @@ public class VenueDto {
     private List<String> amenities;
     private List<String> images;
     private List<Availability> isAvailable;
+    private String createdBy;
+    private String updatedBy;
     // private VenueStatus venueStatus;
     // private Double rating;
     // private Integer reviewCount;
