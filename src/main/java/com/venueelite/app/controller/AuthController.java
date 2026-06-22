@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 
+import com.venueelite.app.dto.*;
+import com.venueelite.app.service.AuthService;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor

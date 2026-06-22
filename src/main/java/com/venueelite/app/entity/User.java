@@ -6,6 +6,10 @@ import com.venueelite.app.enums.UserStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.venueelite.app.enums.Role;
+import com.venueelite.app.enums.UserStatus;
+
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.nio.file.FileStore;

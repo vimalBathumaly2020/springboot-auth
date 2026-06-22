@@ -4,5 +4,7 @@ public enum VenueStatus {
     DRAFT,
     PENDING,
     PUBLISHED,
-    REJECTED
+    REJECTED,
+    INACTIVE
 }
+
