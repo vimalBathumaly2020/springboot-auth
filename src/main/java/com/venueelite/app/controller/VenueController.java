@@ -4,10 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+
 import com.venueelite.app.dto.VenueDto;
 import com.venueelite.app.entity.Venue;
 import com.venueelite.app.enums.VenueStatus;
 import com.venueelite.app.service.VenueService;
+
+import com.venueelite.app.entity.Favorite;
+import com.venueelite.app.service.FavoriteService;
+
+
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VenueController {
     private final VenueService venueService;
+    private final FavoriteService favoriteService;
     @GetMapping("/all")
     public ResponseEntity<List<Venue>> getAllVenues() {
         return ResponseEntity.ok(venueService.getAllVenues());
@@ -56,6 +64,7 @@ public class VenueController {
             return ResponseEntity.notFound().build();
         }
         venueService.deleteVenue(venueId);
+        favoriteService.deleteByVenueId(venueId);
         return ResponseEntity.ok("Venue delete successfully");
     }
 }
