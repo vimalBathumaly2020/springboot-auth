@@ -14,7 +14,7 @@ public class VenueListResponse {
     private String title;
     private VenueType venueType;
     private Integer capacity;
-    private BigDecimal pricePerHour;
+    private Double pricePerHour;
     private Double rating;
     private Integer reviewCount;
     private String city;
