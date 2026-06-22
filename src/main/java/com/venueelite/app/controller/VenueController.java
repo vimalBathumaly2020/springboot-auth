@@ -42,7 +42,7 @@ public class VenueController {
         return ResponseEntity.ok(venueService.getVenuesByHostId(hostId));
     }
     @GetMapping("/{venueId}/address")
-    public ResponseEntity<Address> getVenueAddress(@RequestParam String venueId) {
+    public ResponseEntity<Address> getVenueAddress(@PathVariable String venueId) {
         Optional<Venue> getVenue = venueService.getVenuesById(venueId);
         if(!getVenue.isPresent()){
             return ResponseEntity.notFound().build();
