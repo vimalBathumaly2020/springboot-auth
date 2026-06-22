@@ -66,7 +66,7 @@ public class SecurityConfig {
 
         // 🌐 Origins allowed to call your API
         config.setAllowedOrigins(List.of(
-                "https://your-production-domain.com" // ← replace with your real domain
+                "https://binery-venue.web.app" // ← replace with your real domain
         ));
 
         // ✅ Covers all localhost ports (Flutter web uses whatever port is free)
