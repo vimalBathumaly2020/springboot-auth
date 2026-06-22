@@ -87,7 +87,7 @@ public class UserService {
 
     private UserProfileResponse mapToResponse(User user) {
         return UserProfileResponse.builder()
-                .id(Long.valueOf(user.getId()))
+                .id(user.getId())
                 .email(user.getEmail())
                 .fullName(user.getFullName())
                 .profileImage(user.getProfileImage())
