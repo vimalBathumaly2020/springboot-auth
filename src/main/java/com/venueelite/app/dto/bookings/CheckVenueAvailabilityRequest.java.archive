@@ -1,0 +1,17 @@
+// package com.venueelite.app.dto.bookings;
+
+// import java.time.LocalDate;
+
+// import jakarta.validation.constraints.NotBlank;
+// import lombok.Builder;
+// import lombok.Data;
+
+// @Data
+// @Builder
+// public class CheckVenueAvailabilityRequest {
+//     @NotBlank
+//     private String venueId;
+
+//     @NotBlank
+//     private LocalDate bookingDate;
+// }
