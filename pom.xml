@@ -79,6 +79,11 @@
         </dependency>
 
         <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
             <version>0.11.5</version>
@@ -104,11 +109,18 @@
 
         <!-- Cloudinary -->
 
-            <dependency>
+            <!-- <dependency>
                 <groupId>com.cloudinary</groupId>
                 <artifactId>cloudinary-http5</artifactId>
                 <version>2.0.0</version>
+            </dependency> -->
+            <dependency>
+                <groupId>com.cloudinary</groupId>
+                <artifactId>cloudinary-http44</artifactId>
+                <version>1.36.0</version>
             </dependency>
+
+      
 
 
     </dependencies>
@@ -119,7 +131,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.venueelite.app.AuthApplication</mainClass>
+                    <mainClass>com.venueelite.app.AppApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

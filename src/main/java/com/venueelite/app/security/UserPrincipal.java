@@ -1,10 +1,11 @@
 package com.venueelite.app.security;
 
-import com.venueelite.app.entity.User;
-import com.venueelite.app.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.venueelite.app.entity.User;
+import com.venueelite.app.enums.UserStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -52,5 +53,9 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return user.getStatus() == UserStatus.ACTIVE;
+    }
+
+    public User getUser(){
+        return user;
     }
 }

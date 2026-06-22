@@ -1,9 +1,17 @@
 package com.venueelite.app.enums;
 
 public enum VenueType {
+    ROOFTOP,
+    BALLROOM,
+    GARDEN,
+    CONFERENCCE_ROOM,
+    RESTAURANT,
+    BEACH,
+    WAREHOUSE,
     STUDIO,
-    MEETING_ROOM,
+    OUTDOOR_SPACE,
     EVENT_HALL,
     CREATIVE_SPACE,
-    ROOFTOP
+    MEETING_ROOM,
+    OTHER,
 }
