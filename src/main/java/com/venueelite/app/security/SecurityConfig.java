@@ -82,9 +82,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "http://localhost:5173",   // local dev (Vite)
-                "http://localhost:3000",   // local dev (React/Next)
-                "https://your-frontend.vercel.app" // replace with your actual frontend URL
+                "https://binery-venue.web.app"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
