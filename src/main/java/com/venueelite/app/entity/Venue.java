@@ -45,6 +45,8 @@ public class Venue {
     private String rejectReason;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private String createdBy;
+    private String updatedBy;
 
 }
 

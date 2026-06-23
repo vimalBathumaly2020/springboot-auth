@@ -2,8 +2,9 @@ package com.venueelite.app.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
+import com.venueelite.app.security.UserPrincipal;
 
 
 import com.venueelite.app.dto.VenueDto;
@@ -16,8 +17,14 @@ import com.venueelite.app.service.FavoriteService;
 
 
 
+import com.venueelite.app.entity.Address;
+
+
+
 import java.util.List;
 import java.util.Optional;
+
+
 
 
 
@@ -32,10 +39,27 @@ public class VenueController {
     public ResponseEntity<List<Venue>> getAllVenues() {
         return ResponseEntity.ok(venueService.getAllVenues());
     }
+    @GetMapping("/{venueId}")
+    public ResponseEntity<Venue> getVenueById(@PathVariable String venueId) {
+        Optional<Venue> venue = venueService.getVenuesById(venueId);
+        if(!venue.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(venue.get());
+    }
+    
     @GetMapping("/host/{hostId}")
     public ResponseEntity<List<Venue>> getVenueByHostId(@PathVariable String hostId){
         return ResponseEntity.ok(venueService.getVenuesByHostId(hostId));
     }
+    @GetMapping("/{venueId}/address")
+    public ResponseEntity<Address> getVenueAddress(@PathVariable String venueId) {
+        Optional<Venue> getVenue = venueService.getVenuesById(venueId);
+        if(!getVenue.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(getVenue.get().getAddress());
+    }    
     @GetMapping("/city/{city}")
     public ResponseEntity<List<Venue>> getVenuesByAddressCity(@PathVariable String city) {
         return ResponseEntity.ok(venueService.getVenuesByAddressCity(city));
@@ -45,13 +69,15 @@ public class VenueController {
         return ResponseEntity.ok(venueService.getVenuesByVenueStatus(status));
     }
     @PostMapping("/create-venue")
-    public ResponseEntity<Venue> createVenue(@RequestBody VenueDto dto) {
-        Venue saveCreateVenue = venueService.createVenue(dto);
+    public ResponseEntity<Venue> createVenue(@RequestBody VenueDto dto,Authentication auth) {
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        Venue saveCreateVenue = venueService.createVenue(dto,principal.getUser().getId());
         return ResponseEntity.status(201).body(saveCreateVenue);
     }
     @PutMapping("/update-venue/{venueId}")
-    public ResponseEntity<Venue> updateVenue(@PathVariable String venueId, @RequestBody VenueDto dto) {
-        Venue updatedVenue = venueService.updateVenue(venueId,dto);
+    public ResponseEntity<Venue> updateVenue(@PathVariable String venueId, @RequestBody VenueDto dto, Authentication auth) {
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        Venue updatedVenue = venueService.updateVenue(venueId,dto,principal.getUser().getId());        
         if(updatedVenue==null){
             return ResponseEntity.notFound().build();
         }
