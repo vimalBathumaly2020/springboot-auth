@@ -58,7 +58,7 @@ public class VenueService{
                       .amenities(dto.getAmenities())
                       .images(dto.getImages())
                       .isAvailable(dto.getIsAvailable())
-                      .venueStatus(VenueStatus.PENDING)
+                      .VenueStatus(VenueStatus.PENDING)
                       .rating(0.0)
                       .reviewCount(0)
                       .rejectReason(null)
