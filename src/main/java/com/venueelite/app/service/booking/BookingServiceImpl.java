@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +18,7 @@ import com.venueelite.app.repository.BookingRepository;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
-    private final Authentication authentication;
+    // private final Authentication authentication;
 
     @Override
     public boolean checkVenueAvailability(String venueId, LocalDate bookingDate) {
@@ -35,9 +36,11 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking bookSpace(BookingRequest bookingRequest)
     {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        
         Booking booking = Booking.builder()
                             .bookingDate(bookingRequest.getBookingDate())
-                            .userName(authentication.getName())
+                            .userName(userName)
                             .venueId(bookingRequest.getVenueId())
                             .hours(bookingRequest.getHours())
                             .guessCount(bookingRequest.getGuessCount())
