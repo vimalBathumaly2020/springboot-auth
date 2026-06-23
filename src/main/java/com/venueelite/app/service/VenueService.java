@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 // import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import org.springframework.security.access.AccessDeniedException;
+
 import com.venueelite.app.dto.VenueDto;
 import com.venueelite.app.entity.Venue;
 import com.venueelite.app.enums.VenueStatus;
@@ -71,8 +73,12 @@ public class VenueService{
     }
     public Venue updateVenue(String id, VenueDto dto,String userId){
         Optional<Venue> existing = venueRepository.findById(id);
+        
         if(existing.isPresent()){
             Venue venue = existing.get();
+            if(!userId.equals(venue.getCreatedBy())){
+                throw new AccessDeniedException("Your are not authorized to make a change for this venue");
+            }
             venue.setTitle(dto.getTitle());
             venue.setDescription(dto.getDescription());
             venue.setVenueType(dto.getVenueType());
@@ -84,7 +90,7 @@ public class VenueService{
             venue.setAmenities(dto.getAmenities());
             venue.setImages(dto.getImages());
             venue.setIsAvailable(dto.getIsAvailable());
-            venue.setUpdateAt(LocalDateTime.now());
+            venue.setUpdateAt(LocalDateTime.now());            
             venue.setUpdatedBy(userId);
             return venueRepository.save(venue);
         }
