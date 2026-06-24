@@ -28,6 +28,7 @@ public class Venue {
     @Id
     private String id;
     private String hostId;
+    private String hostName;
     private String title;
     private String description;    
     private VenueType venueType; //enum VenueType
