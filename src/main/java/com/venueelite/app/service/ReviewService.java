@@ -9,31 +9,23 @@ public interface ReviewService {
     /**
      * Post a review for a COMPLETED booking.
      * Validates:
-     *   - Booking exists and belongs to the authenticated user
-     *   - Booking status is COMPLETED
-     *   - No review already exists for this booking
-     *   - venueId matches the booking's venueId
-     * After saving, triggers venue rating recalculation.
+     *  - Booking exists and its venueId matches the request
+     *  - Booking status is COMPLETED
+     *  - No review already exists for this booking
+     * After saving, auto-recalculates venue rating.
      *
-     * @param userId  authenticated user's ID
+     * @param userId  authenticated user's ID (from UserPrincipal)
      * @param request review payload
-     * @return saved ReviewResponse
      */
     ReviewResponse createReview(String userId, ReviewRequest request);
 
     /**
-     * Fetch paginated reviews for a venue, ordered newest-first.
-     *
-     * @param venueId target venue
-     * @param pageable pagination / sort
-     * @return page of ReviewResponse
+     * Fetch paginated reviews for a venue, newest-first.
      */
     Page<ReviewResponse> getVenueReviews(String venueId, Pageable pageable);
 
     /**
-     * Admin moderation: delete a review by ID and recalculate the venue rating.
-     *
-     * @param reviewId review to remove
+     * Admin moderation: delete a review and recalculate venue rating.
      */
     void deleteReview(String reviewId);
 }

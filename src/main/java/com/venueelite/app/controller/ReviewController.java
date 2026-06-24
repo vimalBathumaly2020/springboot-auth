@@ -1,9 +1,8 @@
 package com.venueelite.app.controller;
 
-import com.cloudinary.api.ApiResponse;
-import com.venueelite.app.dto.AuthResponse;
 import com.venueelite.app.dto.ReviewRequest;
 import com.venueelite.app.dto.ReviewResponse;
+import com.venueelite.app.security.UserPrincipal;
 import com.venueelite.app.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,43 +23,33 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     // -------------------------------------------------------------------------
-    // POST /api/v1/reviews
+    // POST /api/reviews
     // Auth: USER
-    // Validates booking ownership, COMPLETED status, and one-review-per-booking
     // -------------------------------------------------------------------------
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<ApiResponse<ReviewResponse>> createReview(
-            @AuthenticationPrincipal AuthResponse principal,
+    public ResponseEntity<ReviewResponse> createReview(
+            @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody ReviewRequest request) {
 
-        ReviewResponse response = reviewService.createReview(principal.getId(), request);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Review submitted successfully", response));
+        // UserPrincipal has no getId() — use getUser().getId()
+        String userId = principal.getUser().getId();
+        ReviewResponse response = reviewService.createReview(userId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // -------------------------------------------------------------------------
-    // GET /api/v1/reviews/venue/{venueId}?page=0&size=10
+    // GET /api/reviews/venue/{venueId}?page=0&size=10
     // Auth: Public
     // -------------------------------------------------------------------------
     @GetMapping("/venue/{venueId}")
-    public <PagedResponse> ResponseEntity<ApiResponse<PagedResponse<ReviewResponse>>> getVenueReviews(
+    public ResponseEntity<Page<ReviewResponse>> getVenueReviews(
             @PathVariable String venueId,
             @RequestParam(defaultValue = "0")  int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<ReviewResponse> reviewPage = reviewService.getVenueReviews(venueId, pageable);
-
-        PagedResponse<ReviewResponse> paged = PagedResponse.<ReviewResponse>builder()
-                .data(reviewPage.getContent())
-                .page(reviewPage.getNumber())
-                .size(reviewPage.getSize())
-                .totalElements(reviewPage.getTotalElements())
-                .totalPages(reviewPage.getTotalPages())
-                .build();
-
-        return ResponseEntity.ok(ApiResponse.success("Reviews retrieved", paged));
+        Page<ReviewResponse> reviews = reviewService.getVenueReviews(venueId, pageable);
+        return ResponseEntity.ok(reviews);
     }
 }

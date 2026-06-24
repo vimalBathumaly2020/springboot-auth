@@ -1,14 +1,21 @@
 package com.venueelite.app.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewRequest {
-    @NotBlank(message = "Booking Id is required")
+
+    @NotBlank(message = "bookingId is required")
     private String bookingId;
 
-    @NotBlank(message = "Venue Id is required")
+    @NotBlank(message = "venueId is required")
     private String venueId;
 
     @NotNull(message = "rating is required")

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -19,31 +18,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Document(collection = "reviews")
 @CompoundIndexes({
-        @CompoundIndex(name = "venue_idx", def = "{'venueId': 1}"),
-        @CompoundIndex(name = "user_idx", def = "{'userId': 1}"),
-        @CompoundIndex(name = "booking_unique_idx",  def = "{'bookingId': 1}", unique = true) //Enforce one review per booking — prevents duplicate
+        @CompoundIndex(name = "venue_idx",      def = "{'venueId': 1}"),
+        @CompoundIndex(name = "user_idx",       def = "{'userId': 1}"),
+        // One review per booking — enforced at DB level
+        @CompoundIndex(name = "booking_unique", def = "{'bookingId': 1}", unique = true)
 })
 public class Review {
+
     @Id
-    private ObjectId id;
+    private String id;
 
-    /** The user who wrote this review */
-    private ObjectId userId;
+    private String userId;    // FK → users
+    private String venueId;   // FK → venues
+    private String bookingId; // FK → bookings (unique — one review per booking)
 
-    /** The venue being reviewed */
-    private ObjectId venueId;
-
-    /**
-     * The completed booking that qualifies the user to leave this review.
-     * Unique index ensures at most one review per booking.
-     */
-    private ObjectId bookingId;
-
-    /** Star rating 1–5 */
-    private Integer rating;
-
-    /** Optional free-text comment, max 1000 chars */
-    private String comment;
+    private Integer rating;   // 1–5
+    private String comment;   // optional, max 1000 chars
 
     @CreatedDate
     private LocalDateTime createdAt;
