@@ -18,6 +18,7 @@ import com.venueelite.app.enums.VenueType;
 @AllArgsConstructor
 public class VenueDto {
     private String hostId;
+    private String hostName;
     private String title;
     private String description;
     private VenueType venueType;

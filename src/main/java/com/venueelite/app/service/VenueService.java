@@ -6,6 +6,9 @@ import com.venueelite.app.enums.VenueStatus;
 import com.venueelite.app.enums.VenueType;
 import com.venueelite.app.repository.VenueRepository;
 
+import com.venueelite.app.entity.User;
+import com.venueelite.app.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 
 // import org.springframework.cglib.core.Local;
@@ -27,6 +30,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VenueService{
     private final VenueRepository venueRepository;
+    private final UserRepository userRepository;
     // private final FavoriteService favoriteService;
 
 
@@ -47,8 +51,11 @@ public class VenueService{
     }
 
     public Venue createVenue(VenueDto dto,String userId){
+
+        String hostName = userRepository.findById(userId).map(User::getFullName).orElse("unknown Host");
         Venue venue = Venue.builder()
                       .hostId(dto.getHostId())
+                      .hostName(hostName)
                       .title(dto.getTitle())
                       .description(dto.getDescription())
                       .venueType(dto.getVenueType())
@@ -79,7 +86,11 @@ public class VenueService{
             if(!userId.equals(venue.getCreatedBy())){
                 throw new AccessDeniedException("Your are not authorized to make a change for this venue");
             }
+            String targetHostId = (dto.getHostId() != null) ? dto.getHostId():venue.getHostId();
+            String hostName=userRepository.findById(targetHostId).map(User::getFullName).orElse("Unknown Host");
             venue.setTitle(dto.getTitle());
+            venue.setHostId(targetHostId);
+            venue.setHostName(hostName);
             venue.setDescription(dto.getDescription());
             venue.setVenueType(dto.getVenueType());
             venue.setCapacity(dto.getCapacity());
