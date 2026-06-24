@@ -42,8 +42,8 @@ public class SecurityConfig {
                         // ✅ PUBLIC APIs
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(
-                                "/api/v1/venues/search",
-                                "/api/v1/venues/filter"
+                                "/api/v1/venues/search/**",
+                                "/api/v1/venues/filter/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/booking/availability").permitAll()
 
