@@ -40,7 +40,7 @@ public class Venue {
     private List<String> amenities; // array of String
     private List<String> images; // array of STring 
     private List<Availability> isAvailable; // array of objects
-    private VenueStatus VenueStatus; // enum VenueStatus
+    private VenueStatus venueStatus; // enum VenueStatus
     private Double rating;
     private Integer reviewCount;
     private String rejectReason;

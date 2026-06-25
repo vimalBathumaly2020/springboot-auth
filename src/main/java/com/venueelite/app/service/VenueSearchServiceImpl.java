@@ -21,12 +21,16 @@ public class VenueSearchServiceImpl implements VenueSearchService {
     // ── KEYWORD SEARCH ───────────────────────────────────────────────────────
     @Override
     public Page<VenueListResponse> search(String keyword, int page, int size) {
-        Criteria criteria = Criteria.where("VenueStatus").is(VenueStatus.PUBLISHED.name())
-                .orOperator(
-                        Criteria.where("title").regex(keyword, "i"),
-                        Criteria.where("description").regex(keyword, "i"),
-                        Criteria.where("address.city").regex(keyword, "i")
-                );
+        Criteria textMatch = new Criteria().orOperator(
+                Criteria.where("title").regex(keyword, "i"),
+                Criteria.where("description").regex(keyword, "i"),
+                Criteria.where("address.city").regex(keyword, "i")
+        );
+
+        Criteria criteria = new Criteria().andOperator(
+                Criteria.where("venueStatus").is(VenueStatus.PUBLISHED.name()),
+                textMatch
+        );
 
         return runQuery(criteria,
                 PageRequest.of(page, size, Sort.by("createdAt").descending()));
@@ -35,7 +39,7 @@ public class VenueSearchServiceImpl implements VenueSearchService {
     // ── FILTER ───────────────────────────────────────────────────────────────
     @Override
     public Page<VenueListResponse> filter(VenueSearchRequest req) {
-        Criteria criteria = Criteria.where("VenueStatus").is(VenueStatus.PUBLISHED.name());
+        Criteria criteria = Criteria.where("venueStatus").is(VenueStatus.PUBLISHED.name());
 
         if (req.getVenueType() != null)
             criteria.and("venueType").is(req.getVenueType().name());
