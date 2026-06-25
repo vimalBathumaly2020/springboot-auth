@@ -83,7 +83,8 @@ public class SecurityConfig {
 
         config.setAllowedOrigins(List.of(
                 "http://localhost:5173",   // local dev (Vite)
-                "http://localhost:3000",   // local dev (React/Next)
+                "http://localhost:3000",
+                "http://localhost:63603/",
                 "https://your-frontend.vercel.app" // replace with your actual frontend URL
         ));
 
